@@ -49,11 +49,11 @@ my_ip = make_octets('an IP','ip')
 
 
 my_subnet = make_octets('a Subnet Mask','subnet_mask')
-first_address = ''
-last_usable = ''
-last_add = ''
-net_add = ''
-broadcast_add = ''
+printed_network_add = ''
+printed_broadcast = ''
+printed_first_usable = ''
+net_add = {}
+broadcast_add = {}
 for subs in my_subnet:         #repeating 4 times, needs to cycle through each oct once
     sub_add = my_subnet[subs]
     ip = my_ip[subs]
@@ -62,27 +62,36 @@ for subs in my_subnet:         #repeating 4 times, needs to cycle through each o
     first_add = int(ip / sub_size)
     starting_add = first_add * sub_size
     make_last = sub_size - 1
-    last_add = starting_add + make_last  # the last usable address of the subnet or returns in full if 255
-    first_usable = starting_add + 1
-    broadcast = last_add + 1
+    broadcast = starting_add + make_last  # the last usable address of the subnet or returns in full if 255
 
-    net_add += str(starting_add) + '.'
-    last_usable += str(last_add) + '.'
-    first_address += str(first_usable) + '.'
-    broadcast_add += str(broadcast) + '.'
 
-    #else:
-     #   net_add += str(starting_add) + '.'
 
-net_add = net_add[:-1]
-last_usable = last_usable[:-1]
-first_address = first_address[:-1]
-broadcast_add = broadcast_add[:-1]
+    net_add[subs] = starting_add
+    broadcast_add[subs] = broadcast
 
-print(f"This is your network address: {net_add}")
-print(f"This is your first usable address: {first_address}")
-print(f"This is your last usable address: {last_usable}")
-print(f"This is your broadcast address: {broadcast_add}")
+    if sub_size != 1 and sub_add == 0:#watch this here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        first_usable = starting_add + 1
+        printed_first_usable += str(first_usable) + '.'
+    elif sub_size == 1:
+        printed_first_usable += str(starting_add) + '.'
+    else:
+        printed_first_usable += str(starting_add) + '.'
+
+
+    printed_network_add += str(starting_add) + '.'
+    printed_broadcast += str(broadcast) + '.'
+
+
+
+
+printed_network_add = printed_network_add[:-1]
+printed_broadcast = printed_broadcast[:-1]
+printed_first_usable = printed_first_usable[:-1]
+
+print(f"This is your network address: {printed_network_add}")
+print(f"This is your first usable address: {printed_first_usable}")
+#print(f"This is your last usable address: {last_usable}")
+print(f"This is your broadcast address: {printed_broadcast}")
 
 
 
