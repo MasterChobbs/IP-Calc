@@ -6,6 +6,7 @@ def make_octets(ip_or_sub,type_of_address):
         octet = 1
         add = {}
         num = ""
+        out_of_range = False
 
         try:
 
@@ -21,15 +22,15 @@ def make_octets(ip_or_sub,type_of_address):
                 add["oct4"] = int(num)
 
             for values in add.values():
-                if type_of_address == 'ip' and values <= 0 or values > 255:  #if address is an IP add
-                    print(f'"{values}" is out of range (1 - 255 only)')
-                if type_of_address == 'subnet_mask' and values < 0 or values > 255: # if add is a subnet mask
+                if values < 0 or values > 255:
                     print(f'"{values}" is out of range (0 - 255 only)')
+                    out_of_range = True
 
-                    break
+            if out_of_range == False: #outside of for to check if num is out of range
+                return add
+                complete = True
 
-            return add
-            complete = True
+
 
         except TypeError:
             print('The address must be formatted: XXX.XXX.XXX.XXX (ex: 192.168.1.1)')
@@ -38,45 +39,40 @@ def make_octets(ip_or_sub,type_of_address):
             print('The address must be formatted: XXX.XXX.XXX.XXX (ex: 192.168.1.1)')
 
 
-
-
 my_ip = make_octets('an IP','ip')
-#print(my_ip)
-
-
-
-
-
-
 my_subnet = make_octets('a Subnet Mask','subnet_mask')
+
 printed_network_add = ''
 printed_broadcast = ''
 printed_first_usable = ''
 net_add = {}
 broadcast_add = {}
+oct_adder = 1
 for subs in my_subnet:         #repeating 4 times, needs to cycle through each oct once
     sub_add = my_subnet[subs]
     ip = my_ip[subs]
-
     sub_size = int(256 - sub_add)
     first_add = int(ip / sub_size)
     starting_add = first_add * sub_size
     make_last = sub_size - 1
     broadcast = starting_add + make_last  # the last usable address of the subnet or returns in full if 255
+    first_usable = {}
 
 
 
     net_add[subs] = starting_add
     broadcast_add[subs] = broadcast
 
-    if sub_size != 1 and sub_add == 0:#watch this here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        first_usable = starting_add + 1
-        printed_first_usable += str(first_usable) + '.'
+
+    if sub_size != 1 or sub_add == 0:
+        if my_subnet['oct' + str(oct_adder)] > 0 or sub_add == 0:#watch this here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            first_usable = starting_add + 1
+            printed_first_usable += str(first_usable) + '.'
     elif sub_size == 1:
         printed_first_usable += str(starting_add) + '.'
     else:
         printed_first_usable += str(starting_add) + '.'
-
+    oct_adder +=1
 
     printed_network_add += str(starting_add) + '.'
     printed_broadcast += str(broadcast) + '.'
