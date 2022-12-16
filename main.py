@@ -45,9 +45,10 @@ my_subnet = make_octets('a Subnet Mask','subnet_mask')
 printed_network_add = ''
 printed_broadcast = ''
 printed_first_usable = ''
+printed_last_usable = ''
 net_add = {}
 broadcast_add = {}
-oct_adder = 1
+
 for subs in my_subnet:         #repeating 4 times, needs to cycle through each oct once
     sub_add = my_subnet[subs]
     ip = my_ip[subs]
@@ -56,26 +57,32 @@ for subs in my_subnet:         #repeating 4 times, needs to cycle through each o
     starting_add = first_add * sub_size
     make_last = sub_size - 1
     broadcast = starting_add + make_last  # the last usable address of the subnet or returns in full if 255
-    first_usable = {}
 
 
 
-    net_add[subs] = starting_add
-    broadcast_add[subs] = broadcast
+
+  
 
 
-    if sub_size != 1 or sub_add == 0:
-        if my_subnet['oct' + str(oct_adder)] > 0 or sub_add == 0:#watch this here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            first_usable = starting_add + 1
-            printed_first_usable += str(first_usable) + '.'
-    elif sub_size == 1:
-        printed_first_usable += str(starting_add) + '.'
+    if sub_size != 1 and subs == 'oct4':
+        printed_first_usable += str(starting_add+1) + '.'
+    elif subs == 'oct1' and first_add == int(0):
+        printed_first_usable += str(starting_add + 1) + '.'
     else:
         printed_first_usable += str(starting_add) + '.'
-    oct_adder +=1
 
-    printed_network_add += str(starting_add) + '.'
+    if subs == 'oct1' and first_add == int(0):
+        printed_network_add += str(starting_add+1) + '.'
+    else:
+        printed_network_add += str(starting_add) + '.'
+
     printed_broadcast += str(broadcast) + '.'
+
+    if subs == 'oct4':
+        printed_last_usable += str(broadcast -1)
+
+    else:
+        printed_last_usable = printed_broadcast
 
 
 
@@ -83,10 +90,11 @@ for subs in my_subnet:         #repeating 4 times, needs to cycle through each o
 printed_network_add = printed_network_add[:-1]
 printed_broadcast = printed_broadcast[:-1]
 printed_first_usable = printed_first_usable[:-1]
+printed_last_usable = printed_last_usable
 
 print(f"This is your network address: {printed_network_add}")
 print(f"This is your first usable address: {printed_first_usable}")
-#print(f"This is your last usable address: {last_usable}")
+print(f"This is your last usable address: {printed_last_usable}")
 print(f"This is your broadcast address: {printed_broadcast}")
 
 
@@ -101,8 +109,6 @@ print(f"This is your broadcast address: {printed_broadcast}")
 
 
 
-#x = lambda a : a + 10
-#print(x(5))
 
 
 
