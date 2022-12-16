@@ -58,12 +58,6 @@ for subs in my_subnet:         #repeating 4 times, needs to cycle through each o
     make_last = sub_size - 1
     broadcast = starting_add + make_last  # the last usable address of the subnet or returns in full if 255
 
-
-
-
-  
-
-
     if sub_size != 1 and subs == 'oct4':
         printed_first_usable += str(starting_add+1) + '.'
     elif subs == 'oct1' and first_add == int(0):
@@ -84,13 +78,10 @@ for subs in my_subnet:         #repeating 4 times, needs to cycle through each o
     else:
         printed_last_usable = printed_broadcast
 
-
-
-
 printed_network_add = printed_network_add[:-1]
 printed_broadcast = printed_broadcast[:-1]
 printed_first_usable = printed_first_usable[:-1]
-printed_last_usable = printed_last_usable
+printed_last_usable = printed_last_usable # left off -1 so it doesn't subtract last number from last octet
 
 print(f"This is your network address: {printed_network_add}")
 print(f"This is your first usable address: {printed_first_usable}")
